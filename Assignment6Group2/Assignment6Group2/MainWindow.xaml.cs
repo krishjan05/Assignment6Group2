@@ -31,6 +31,8 @@ namespace Assignment6Group2
         const double COST_LABOR = 20.00;
         const double TAX_MULTIPLIER = 0.06;
         const double costPart = 0.00;
+        double costParts;
+        double costLabour;
         #endregion
         public MainWindow()
         {
@@ -108,6 +110,8 @@ namespace Assignment6Group2
         }
         public double OtherCharges(double parts, double labour)
         {
+            costParts = Convert.ToDouble(txtParts.Text);
+            costLabour = Convert.ToDouble(txtLabour.Text);
             if (double.TryParse(txtParts.Text, out parts) && double.TryParse(txtLabour.Text, out labour))
             {
                 if (txtParts.Text == "")
@@ -136,14 +140,19 @@ namespace Assignment6Group2
         }
         public double TotalCharges()
         {
-            double costParts = Convert.ToDouble(txtParts.Text);
-            double costLabour = Convert.ToDouble(txtLabour.Text);
+            try
+            { 
             double totalCharges = OilLubeCharges((bool)chbxOilChange.IsChecked, (bool)chbxLubeJob.IsChecked) +
                 FlushCharges((bool)chbxRadiatorFlush.IsChecked, (bool)chbxTransmissionFlush.IsChecked) +
                 MiscCharges((bool)chbxInspection.IsChecked, (bool)chbxMufflerReplacement.IsChecked, (bool)chbxTireRotation.IsChecked) +
-                OtherCharges(costPart, costLabour)+
+                OtherCharges(costPart, costLabour) +
                 TaxCharges(double.Parse(txtParts.Text));
             return totalCharges;
+            }catch(Exception ex)
+            {
+                MessageBox.Show("Please enter all inputs", "Error");
+                return 0.00;
+            }
         }
 
         private void btnCalculate_Click(object sender, RoutedEventArgs e)
